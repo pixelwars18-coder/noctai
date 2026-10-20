@@ -1,0 +1,11 @@
+#!/bin/sh
+# Opens Noctai; reuses the running instance when there is one.
+#   noctai [chat|image|video|speech|audio|models|downloads]
+dir=$(dirname -- "$(readlink -f -- "$0")")
+page=${1:-}
+if [ -n "$page" ]; then
+    qs -p "$dir" ipc call noctai page "$page" >/dev/null 2>&1 && exit 0
+else
+    qs -p "$dir" ipc call noctai show >/dev/null 2>&1 && exit 0
+fi
+exec qs -p "$dir" -n -d >/dev/null 2>&1
